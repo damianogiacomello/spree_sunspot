@@ -56,7 +56,7 @@ module SpreeSunspot
       base_scope = base_scope.in_taxon(taxon) unless taxon.blank?
       base_scope = get_products_conditions_for(base_scope, keywords) unless filters.empty?
 
-      base_scope = base_scope.ascend_by_master_price
+      #base_scope = base_scope.ascend_by_master_price
       base_scope
     end
 
