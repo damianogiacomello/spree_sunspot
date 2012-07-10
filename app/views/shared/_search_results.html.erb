@@ -1,0 +1,11 @@
+<% content_for :sidebar do %>
+  <div data-hook="homepage_sidebar_navigation">
+    <%= render :partial => 'shared/taxonomies' %>
+  </div>
+<% end %>
+
+<% if @products.blank? %>
+<%= t(:empty_search_results) %>
+<% else %>
+<%= render :partial => "shared/products", :locals => { :products => @products }%>
+<% end %>

@@ -1,8 +1,8 @@
-require 'spree/core/search/base'
-require 'spree/sunspot/filter/filter'
+require 'spree/search/base'
+require 'spree_sunspot/filter/filter'
 
-module Spree::Sunspot
-  class Search < Spree::Core::Search::Base
+module SpreeSunspot
+  class Search < Spree::Search::Base
     def query
       @filter_query
     end
@@ -39,9 +39,9 @@ module Spree::Sunspot
       hits = []
       if products_search.total > 0
         hits = products_search.hits.collect{|hit| hit.primary_key.to_i}
-        base_scope = base_scope.where ["#{Spree::Product.table_name}.id in (?)", hits]
+        base_scope = base_scope.where ["#{Product.table_name}.id in (?)", hits]
       else
-        base_scope = base_scope.where ["#{Spree::Product.table_name}.id = -1"]
+        base_scope = base_scope.where ["#{Product.table_name}.id = -1"]
       end
       products_scope = @product_group.apply_on(base_scope)
       products_results = products_scope.includes([:images, :master]).page(1)
@@ -61,20 +61,20 @@ module Spree::Sunspot
     end
 
     def get_products_conditions_for(base_scope, query)
-      @search = Sunspot.new_search(Spree::Product) do |q|
+      @search = Sunspot.new_search(Product) do |q|
         q.keywords(query) unless query.blank?
         # There is no option to say don't paginate.
         q.paginate(:page => 1, :per_page => 1000000)
       end
 
-      @filter_query = Spree::Sunspot::Filter::Query.new(@properties[:filters])
+      @filter_query = SpreeSunspot::Filter::Query.new(@properties[:filters])
       @search = @filter_query.build_search(@search)
       @search.execute
       if @search.total > 0
         hits = @search.hits.collect{|hit| hit.primary_key.to_i}
-        base_scope = base_scope.where ["#{Spree::Product.table_name}.id in (?)", hits]
+        base_scope = base_scope.where ["#{Product.table_name}.id in (?)", hits]
       else
-        base_scope = base_scope.where ["#{Spree::Product.table_name}.id = -1"]
+        base_scope = base_scope.where ["#{Product.table_name}.id = -1"]
       end
       base_scope
     end
@@ -87,7 +87,7 @@ module Spree::Sunspot
 
     private
     def get_common_base_scope
-      base_scope = @cached_product_group ? @cached_product_group.products.active : Spree::Product.active
+      base_scope = @cached_product_group ? @cached_product_group.products.active : Product.active
       base_scope = base_scope.on_hand unless Spree::Config[:show_zero_stock_products]
       base_scope = base_scope.group_by_products_id if @product_group.product_scopes.size > 1
       base_scope
