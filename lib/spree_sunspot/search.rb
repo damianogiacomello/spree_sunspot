@@ -54,8 +54,9 @@ module SpreeSunspot
     def get_base_scope
       base_scope = get_common_base_scope
       base_scope = base_scope.in_taxon(taxon) unless taxon.blank?
-      base_scope = get_products_conditions_for(base_scope, keywords) unless filters.empty?
-
+      base_scope = get_products_conditions_for(base_scope, keywords)# unless filters.empty?
+      
+      # TODO order by master price if is preferred
       #base_scope = base_scope.ascend_by_master_price
       base_scope
     end
@@ -64,11 +65,13 @@ module SpreeSunspot
       @search = Sunspot.new_search(Product) do |q|
         q.keywords(query) unless query.blank?
         # There is no option to say don't paginate.
-        q.paginate(:page => 1, :per_page => 1000000)
+        #q.paginate(:page => 1, :per_page => 1000000)
       end
-
-      @filter_query = SpreeSunspot::Filter::Query.new(@properties[:filters])
-      @search = @filter_query.build_search(@search)
+      
+      if !@properties[:filters].blank?
+        @filter_query = SpreeSunspot::Filter::Query.new(@properties[:filters])
+        @search = @filter_query.build_search(@search)
+      end
       @search.execute
       if @search.total > 0
         hits = @search.hits.collect{|hit| hit.primary_key.to_i}
