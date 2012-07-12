@@ -52,11 +52,12 @@ module SpreeSunspot
 
     protected
     def get_base_scope
-      base_scope = get_common_base_scope
+      base_scope = Spree::Product.active
       base_scope = base_scope.in_taxon(taxon) unless taxon.blank?
-      base_scope = get_products_conditions_for(base_scope, keywords) unless filters.empty?
-
-      base_scope = base_scope.ascend_by_master_price
+      base_scope = get_products_conditions_for(base_scope, keywords) unless keywords.blank?
+      base_scope = base_scope.on_hand unless Spree::Config[:show_zero_stock_products]
+      
+      base_scope = add_search_scopes(base_scope)
       base_scope
     end
 
@@ -87,14 +88,5 @@ module SpreeSunspot
       @properties[:filters] = params[:s] || params['s'] || []
       @properties[:total_similar_products] = params[:total_similar_products].to_i > 0 ? params[:total_similar_products].to_i : Spree::Config[:total_similar_products]
     end
-
-    private
-    def get_common_base_scope
-      base_scope = @cached_product_group ? @cached_product_group.products.active : Spree::Product.active
-      base_scope = base_scope.on_hand unless Spree::Config[:show_zero_stock_products]
-      base_scope = base_scope.group_by_products_id if @product_group.product_scopes.size > 1
-      base_scope
-    end
-
   end
 end
