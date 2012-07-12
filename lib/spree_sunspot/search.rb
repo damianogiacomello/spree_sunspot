@@ -67,8 +67,11 @@ module SpreeSunspot
         q.paginate(:page => 1, :per_page => 1000000)
       end
 
-      @filter_query = SpreeSunspot::Filter::Query.new(@properties[:filters])
-      @search = @filter_query.build_search(@search)
+      if !@properties[:filters].blank?
+        @filter_query = SpreeSunspot::Filter::Query.new(@properties[:filters])
+        @search = @filter_query.build_search(@search)
+      end
+      
       @search.execute
       if @search.total > 0
         hits = @search.hits.collect{|hit| hit.primary_key.to_i}
