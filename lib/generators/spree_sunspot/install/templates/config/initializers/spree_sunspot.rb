@@ -9,6 +9,9 @@ SpreeSunspot::Setup.configure do
     string :taxon_names, :multiple => true do
       taxons.collect{|t| t.self_and_ancestors.map(&:name) }.flatten
     end
+    text :taxon_names do
+      taxons.collect{|t| t.self_and_ancestors.map(&:name) }.flatten
+    end
     float :price
     # Additional Examples
     #
