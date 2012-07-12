@@ -65,7 +65,7 @@ module SpreeSunspot
       @search = Sunspot.new_search(Spree::Product) do |q|
         q.keywords(query) unless query.blank?
         # There is no option to say don't paginate.
-        q.paginate(:page => 1, :per_page => 1000000)
+        #q.paginate(:page => 1, :per_page => 1000000)
       end
 
       if !@properties[:filters].blank?
