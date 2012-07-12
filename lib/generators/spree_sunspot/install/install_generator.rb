@@ -15,7 +15,7 @@ module SpreeSunspot
       end
 
       def copy_initializer_file
-        copy_file "spree_sunspot.rb", "config/initializers/#{file_name}.rb"
+        copy_file "spree_sunspot.rb", "config/initializers/spree_sunspot.rb"
       end
 
       def add_javascripts
