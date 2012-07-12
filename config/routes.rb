@@ -1,6 +1,3 @@
-Spree::Sunspot::Engine.routes.draw do
-end
-
 Spree::Core::Engine.routes.prepend do
   match "/q" => "home#filter"
   match "/products/q" => "products#filter"
