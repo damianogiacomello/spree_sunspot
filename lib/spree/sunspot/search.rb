@@ -89,7 +89,7 @@ module Spree::Sunspot
     def get_common_base_scope
       base_scope = @cached_product_group ? @cached_product_group.products.active : Spree::Product.active
       base_scope = base_scope.on_hand unless Spree::Config[:show_zero_stock_products]
-      base_scope = base_scope.group_by_products_id if @product_group.product_scopes.size > 1
+      #base_scope = base_scope.group_by_products_id if @product_group.product_scopes.size > 1
       base_scope
     end
 
