@@ -33,7 +33,7 @@ SpreeSunspot::Setup.filters do |filters|
   filters.add do |f|
     f.search_param = 'price'
     f.display_name = 'Price'
-    f.values { [0..10, 10..20, 20..30, 30..Spree::Sunspot::Setup::IGNORE_MAX] }
+    f.values { [0..10, 10..20, 20..30, 30..SpreeSunspot::Setup::IGNORE_MAX] }
   end
 
   # Additional examples
