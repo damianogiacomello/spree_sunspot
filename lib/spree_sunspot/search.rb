@@ -6,25 +6,25 @@ module SpreeSunspot
     def query
       @filter_query
     end
-
+    
     def retrieve_products(*args)
-      base_scope = get_base_scope
+      @products_scope = get_base_scope
       if args
         args.each do |additional_scope|
           case additional_scope
           when Hash
             scope_method = additional_scope.keys.first
             scope_values = additional_scope[scope_method]
-            base_scope = base_scope.send(scope_method.to_sym, *scope_values)
+            @products_scope = @products_scope.send(scope_method.to_sym, *scope_values)
           else
-            base_scope = base_scope.send(additional_scope.to_sym)
+            @products_scope = @products_scope.send(additional_scope.to_sym)
           end
         end
       end
-      @products_scope = @product_group.apply_on(base_scope)
-      curr_page = manage_pagination && keywords ? 1 : page
-
-      @products = @products_scope.includes([:images, :master]).page(curr_page).per(per_page)
+      
+      curr_page = page || 1
+      
+      @products = @products_scope.includes([:master]).page(curr_page).per(per_page)
     end
 
     def similar_products(product, *field_names)
