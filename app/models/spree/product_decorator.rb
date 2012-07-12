@@ -14,7 +14,7 @@ Spree::Product.class_eval do
   end
 end
 
-unless Spree::Sunspot::Setup.configuration.nil?
-  Spree::Product.class_eval &Spree::Sunspot::Setup.configuration
+unless SpreeSunspot::Setup.configuration.nil?
+  Spree::Product.class_eval &SpreeSunspot::Setup.configuration
 end
 

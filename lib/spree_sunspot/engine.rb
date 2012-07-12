@@ -1,8 +1,7 @@
-require 'spree/sunspot/setup'
-require 'spree/sunspot/filter_support'
-require 'spree_core'
+require 'spree_sunspot/setup'
+require 'spree_sunspot/filter_support'
 
-module Spree::Sunspot
+module SpreeSunspot
   class Engine < Rails::Engine
     engine_name 'spree_sunspot'
 
@@ -14,12 +13,12 @@ module Spree::Sunspot
     end
 
     def self.activate
-      Dir.glob(File.join(File.dirname(__FILE__), "../../../app/**/*_decorator*.rb")) do |c|
+      Dir.glob(File.join(File.dirname(__FILE__), "../../app/**/*_decorator*.rb")) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
 
       ActionView::Base.class_eval do
-        include Spree::Sunspot::FilterSupport::Helpers
+        include SpreeSunspot::FilterSupport::Helpers
       end
     end
 
@@ -27,11 +26,11 @@ module Spree::Sunspot
 
     initializer "spree.sunspot.search_config", :after => "spree.load_preferences" do |app|
       Spree::BaseController.class_eval do
-        include(Spree::Sunspot::FilterSupport)
+        include(SpreeSunspot::FilterSupport)
         filter_support
       end
 
-      app.config.spree.preferences.searcher_class = Spree::Sunspot::Search
+      app.config.spree.preferences.searcher_class = SpreeSunspot::Search
     end
   end
 end

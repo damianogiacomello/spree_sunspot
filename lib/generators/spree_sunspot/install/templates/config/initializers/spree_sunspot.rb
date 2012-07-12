@@ -1,4 +1,4 @@
-Spree::Sunspot::Setup.configure do
+SpreeSunspot::Setup.configure do
   searchable :auto_index => true, :auto_remove => true do
     text :name, :boost => 2.0
     text :description, :boost => 1.2
@@ -7,6 +7,9 @@ Spree::Sunspot::Setup.configure do
       taxons.collect{|t| t.self_and_ancestors.map(&:id) }.flatten
     end
     string :taxon_names, :multiple => true do
+      taxons.collect{|t| t.self_and_ancestors.map(&:name) }.flatten
+    end
+    text :taxon_names do
       taxons.collect{|t| t.self_and_ancestors.map(&:name) }.flatten
     end
     float :price
@@ -24,7 +27,7 @@ Spree::Sunspot::Setup.configure do
   end
 end
 
-Spree::Sunspot::Setup.filters do |filters|
+SpreeSunspot::Setup.filters do |filters|
   # Maximum value would be ignored if the range maximum is set to 
   # Spree::Sunspot::Setup::IGNORE_MAX
   filters.add do |f|

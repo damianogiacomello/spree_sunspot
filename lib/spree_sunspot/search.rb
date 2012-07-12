@@ -1,7 +1,7 @@
 require 'spree/core/search/base'
-require 'spree/sunspot/filter/filter'
+require 'spree_sunspot/filter/filter'
 
-module Spree::Sunspot
+module SpreeSunspot
   class Search < Spree::Core::Search::Base
     def query
       @filter_query
@@ -67,7 +67,7 @@ module Spree::Sunspot
         q.paginate(:page => 1, :per_page => 1000000)
       end
 
-      @filter_query = Spree::Sunspot::Filter::Query.new(@properties[:filters])
+      @filter_query = SpreeSunspot::Filter::Query.new(@properties[:filters])
       @search = @filter_query.build_search(@search)
       @search.execute
       if @search.total > 0
@@ -82,14 +82,14 @@ module Spree::Sunspot
     def prepare(params)
       super
       @properties[:filters] = params[:s] || params['s'] || []
-      #@properties[:total_similar_products] = params[:total_similar_products].to_i > 0 ? params[:total_similar_products].to_i : Spree::Config[:total_similar_products]
+      @properties[:total_similar_products] = params[:total_similar_products].to_i > 0 ? params[:total_similar_products].to_i : Spree::Config[:total_similar_products]
     end
 
     private
     def get_common_base_scope
       base_scope = @cached_product_group ? @cached_product_group.products.active : Spree::Product.active
       base_scope = base_scope.on_hand unless Spree::Config[:show_zero_stock_products]
-      #base_scope = base_scope.group_by_products_id if @product_group.product_scopes.size > 1
+      base_scope = base_scope.group_by_products_id if @product_group.product_scopes.size > 1
       base_scope
     end
 
