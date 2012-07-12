@@ -82,7 +82,7 @@ module Spree::Sunspot
     def prepare(params)
       super
       @properties[:filters] = params[:s] || params['s'] || []
-      @properties[:total_similar_products] = params[:total_similar_products].to_i > 0 ? params[:total_similar_products].to_i : Spree::Config[:total_similar_products]
+      #@properties[:total_similar_products] = params[:total_similar_products].to_i > 0 ? params[:total_similar_products].to_i : Spree::Config[:total_similar_products]
     end
 
     private
