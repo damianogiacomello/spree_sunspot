@@ -4,20 +4,20 @@ Gem::Specification.new do |s|
   s.name        = 'spree_sunspot'
   s.version     = '1.0.0'
   s.summary     = 'Use Sunspot as search engine in Spree applications'
-  s.description = 'Use Sunspot for searching and filtering products in Spree applications'
   s.required_ruby_version = '>= 1.8.7'
 
-  s.author            = 'Chandramohan Rangaswamy'
-  s.email             = 'chandru@simplelife.in'
-  s.homepage          = 'http://www.simplelife.in'
+  s.author            = 'Damiano Giacomello'
+  s.email             = 'damiano.giacomello@diginess.it'
+  #s.homepage          = 'http://www.rubyonrails.org'
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  #s.files         = `git ls-files`.split("\n")
+  s.files        = Dir['CHANGELOG', 'README.md', 'LICENSE', 'lib/**/*', 'app/**/*', 'db/**/*', 'config/**/*']
   s.require_path = 'lib'
   s.requirements << 'none'
 
   s.add_dependency 'spree_core'
+
   s.add_dependency 'sunspot_rails'
-  
-  s.add_development_dependency 'sunspot_solr', '>= 1.3.0'
+  s.add_dependency 'sunspot_solr'
+  s.add_dependency 'progress_bar'
 end
